@@ -1,17 +1,13 @@
-import { NextResponse } from "next/server";
 import { getSessionCookies } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 export async function POST() {
   try {
     const session = await getSessionCookies();
     session.destroy();
-
-    // TODO:Shane - redirect back to login.
-    return NextResponse.json({ success: true });
   } catch (error) {
-    return NextResponse.json(
-      { error: "Logout failed" },
-      { status: 500 }
-    );
+    console.error('Failed to destroy session:', error);
   }
+
+  redirect('/login');
 }
