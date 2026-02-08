@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mobile App Home Screen Builder
 
-## Getting Started
+A full-stack application for configuring mobile app home screens with real-time preview, versioning, and publish workflows.
 
-First, run the development server:
+## Tech Stack
 
+- **Frontend:** Next.js 14 (App Router), React, TypeScript, Tailwind CSS
+- **Backend:** Next.js API Routes
+- **Database:** PostgreSQL (Docker)
+- **ORM:** Drizzle ORM
+- **Validation:** Zod
+- **Authentication:** iron-session
+
+## Prerequisites
+
+- Node.js 18+ 
+- npm
+- Docker & Docker Compose
+
+## Quick Start
 ```bash
+# 1. Clone the repository
+git clone <your-repo-url>
+cd mobile-app-builder
+
+# 2. Install dependencies
+npm install
+
+# 3. Set up environment variables
+cp .env.template .env.local
+
+# 4. Start PostgreSQL + seed database
+npm run setup
+
+# 5. Start the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) and log in with the password from `.env.local`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available Scripts
+```bash
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run start        # Start production server
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+npm run docker:up    # Start PostgreSQL container
+npm run docker:down  # Stop PostgreSQL container
+npm run docker:reset # Reset database (WARNING: deletes all data)
 
-## Learn More
+npm run db:push      # Sync schema to database
+npm run db:seed      # Seed with sample data
+npm run db:studio    # Open Drizzle Studio (database GUI)
 
-To learn more about Next.js, take a look at the following resources:
+npm run setup        # Complete setup (docker + push + seed)
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Environment Variables
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+See `.env.template` for required variables:
+- `DATABASE_URL` - PostgreSQL connection string
+- `ADMIN_PASSWORD` - Admin login password
+- `SESSION_SECRET` - Session encryption key
 
-## Deploy on Vercel
+## Architecture
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+TODO:Shane - Diagram here.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Key Design Decisions
+
+**PostgreSQL over SQLite:**
+Initially i chose SqlLite for simplicity with the take-home project. But I ended up running into some async quirks when creating the Configuration table POST endpoints. It appears SqlLite only supports synchronous calls out of the box. So due to that, I migrated over to PostgreSQL to align with production systems, support concurrent access, while keeping the simple set up by containerizing w/ Docker.
+
+**Versioning Strategy:**
+Every save creates a new revision, enabling full audit history and one-click rollback. Published state is tracked separately from save state.
+
+[TODO:Shane - More details in DECISION_LOG.md]
