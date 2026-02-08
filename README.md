@@ -4,7 +4,7 @@ A full-stack application for configuring mobile app home screens with real-time 
 
 ## Tech Stack
 
-- **Frontend:** Next.js 14 (App Router), React, TypeScript, Tailwind CSS
+- **Frontend:** Next.js 16 (App Router), React, TypeScript, Tailwind CSS
 - **Backend:** Next.js API Routes
 - **Database:** PostgreSQL (Docker)
 - **ORM:** Drizzle ORM
@@ -13,11 +13,12 @@ A full-stack application for configuring mobile app home screens with real-time 
 
 ## Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm
 - Docker & Docker Compose
 
 ## Quick Start
+
 ```bash
 # 1. Clone the repository
 git clone <your-repo-url>
@@ -39,6 +40,7 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000) and log in with the password from `.env.local`
 
 ## Available Scripts
+
 ```bash
 npm run dev          # Start development server
 npm run build        # Build for production
@@ -58,6 +60,7 @@ npm run setup        # Complete setup (docker + push + seed)
 ## Environment Variables
 
 See `.env.template` for required variables:
+
 - `DATABASE_URL` - PostgreSQL connection string
 - `ADMIN_PASSWORD` - Admin login password
 - `SESSION_SECRET` - Session encryption key
