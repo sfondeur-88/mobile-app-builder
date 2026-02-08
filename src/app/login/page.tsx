@@ -83,7 +83,7 @@ export default function LoginPage() {
         </form>
         <div className="text-center">
           <p className="text-xs text-gray-500">
-            Default password is set in .env.local
+            (Default password is set in .env.local)
           </p>
         </div>
       </div>
