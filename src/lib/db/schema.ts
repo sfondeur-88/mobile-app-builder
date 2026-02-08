@@ -1,4 +1,4 @@
-import { boolean, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, jsonb, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 /**
  * Configuration table.
@@ -23,7 +23,7 @@ export const configurationRevisions = pgTable("configuration_revisions", {
     .notNull()
     .references(() => configurations.id, { onDelete: "cascade" }),
   revisionNumber: serial("revision_number").notNull(),
-  content: text("content").notNull().$type<ConfigurationContent>(),
+  content: jsonb("content").$type<ConfigurationContent>().notNull(),
   isPublished: boolean("is_published").notNull().default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });

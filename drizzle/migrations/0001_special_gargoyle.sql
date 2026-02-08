@@ -1,0 +1,1 @@
+ALTER TABLE "configuration_revisions" ALTER COLUMN "content" SET DATA TYPE jsonb;
