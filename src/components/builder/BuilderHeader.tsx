@@ -3,6 +3,7 @@
 import { useBuilderStore } from "@/lib/store";
 import { SaveStatus } from "@/types";
 import { useState } from "react";
+import RevisionsModal from "./RevisionsModal";
 
 export default function BuilderHeader() {
   const isSaving = useBuilderStore((s) => s.isSaving);
@@ -14,6 +15,7 @@ export default function BuilderHeader() {
 
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
   const [publishStatus, setPublishStatus] = useState<SaveStatus>('idle');
+  const [isRevisionsOpen, setIsRevisionsOpen] = useState<boolean>(false);
 
   const handleSave = async () => {
     try {
@@ -53,77 +55,88 @@ export default function BuilderHeader() {
   };
 
   return (
-    <div className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6">
-      <div className="flex items-center gap-3">
-        <h2 className="text-neutral-900 font-semibold">Home Screen</h2>
+    <>
+      <div className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6">
+        <div className="flex items-center gap-3">
+          <h2 className="text-neutral-900 font-semibold">Home Screen</h2>
 
-        {/* Unsaved Changes Indicator */}
-        {hasUnsavedChanges && (
-          <span className="text-xs text-amber-600 font-medium">
-            • Unsaved changes
-          </span>
-        )}
+          {/* Unsaved Changes Indicator */}
+          {hasUnsavedChanges && (
+            <span className="text-xs text-amber-600 font-medium">
+              • Unsaved changes
+            </span>
+          )}
 
-        {/* Published Indicator */}
-        {isPublished && !hasUnsavedChanges && (
-          <span className="text-xs text-emerald-600 font-medium">
-            • Published
-          </span>
-        )}
+          {/* Published Indicator */}
+          {isPublished && !hasUnsavedChanges && (
+            <span className="text-xs text-emerald-600 font-medium">
+              • Published
+            </span>
+          )}
 
-        {/* Save Status Messages */}
-        {saveStatus === 'success' && (
-          <span className="text-xs text-emerald-600 font-medium">
-            ✓ Saved successfully
-          </span>
-        )}
-        {saveStatus === 'error' && (
-          <span className="text-xs text-red-600 font-medium">
-            ✗ Save failed
-          </span>
-        )}
+          {/* Save Status Messages */}
+          {saveStatus === 'success' && (
+            <span className="text-xs text-emerald-600 font-medium">
+              ✓ Saved successfully
+            </span>
+          )}
+          {saveStatus === 'error' && (
+            <span className="text-xs text-red-600 font-medium">
+              ✗ Save failed
+            </span>
+          )}
 
-        {/* Publish Status Messages */}
-        {publishStatus === 'success' && (
-          <span className="text-xs text-emerald-600 font-medium">
-            ✓ Published successfully
-          </span>
-        )}
-        {publishStatus === 'error' && hasUnsavedChanges && (
-          <span className="text-xs text-red-600 font-medium">
-            ✗ Please save before publishing
-          </span>
-        )}
-        {publishStatus === 'error' && !hasUnsavedChanges && (
-          <span className="text-xs text-red-600 font-medium">
-            ✗ Publish failed
-          </span>
-        )}
+          {/* Publish Status Messages */}
+          {publishStatus === 'success' && (
+            <span className="text-xs text-emerald-600 font-medium">
+              ✓ Published successfully
+            </span>
+          )}
+          {publishStatus === 'error' && hasUnsavedChanges && (
+            <span className="text-xs text-red-600 font-medium">
+              ✗ Please save before publishing
+            </span>
+          )}
+          {publishStatus === 'error' && !hasUnsavedChanges && (
+            <span className="text-xs text-red-600 font-medium">
+              ✗ Publish failed
+            </span>
+          )}
+        </div>
+
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setIsRevisionsOpen(true)}
+            className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer"
+          >
+            Revisions
+          </button>
+
+          <button
+            onClick={handleSave}
+            disabled={!hasUnsavedChanges || isSaving}
+            className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md disabled:opacity-50  cursor-pointer disabled:cursor-not-allowed"
+          >
+            {isSaving ? 'Saving...' : 'Save'}
+          </button>
+
+          {/* TODO:Shane - tooltip on hover to let the user know more info? */}
+          {/* Ex: 'Current config is already published' */}
+          <button
+            onClick={handlePublish}
+            disabled={hasUnsavedChanges || isPublishing || (isPublished && !hasUnsavedChanges)}
+            className="px-6 py-2 text-sm font-medium text-white bg-emerald-500 hover:bg-emerald-600 rounded-md disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+          >
+            {isPublishing ? 'Publishing...' : 'Publish'}
+          </button>
+        </div>
       </div>
 
-      <div className="flex items-center gap-3">
-        <button className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer">
-          Revisions
-        </button>
-
-        <button
-          onClick={handleSave}
-          disabled={!hasUnsavedChanges || isSaving}
-          className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md disabled:opacity-50  cursor-pointer disabled:cursor-not-allowed"
-        >
-          {isSaving ? 'Saving...' : 'Save'}
-        </button>
-
-        {/* TODO:Shane - tooltip on hover to let the user know more info? */}
-        {/* Ex: 'Current config is already published' */}
-        <button
-          onClick={handlePublish}
-          disabled={hasUnsavedChanges || isPublishing || (isPublished && !hasUnsavedChanges)}
-          className="px-6 py-2 text-sm font-medium text-white bg-emerald-500 hover:bg-emerald-600 rounded-md disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
-        >
-          {isPublishing ? 'Publishing...' : 'Publish'}
-        </button>
-      </div>
-    </div>
+      <RevisionsModal
+        isOpen={isRevisionsOpen}
+        onClose={() => setIsRevisionsOpen(false)}
+        configId={1}
+      />
+    </>
   );
 }

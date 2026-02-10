@@ -1,7 +1,5 @@
+import { getRevisions } from "@/lib/api/getRevisions";
 import { getSessionCookies } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { configurationRevisions } from "@/lib/db/schema";
-import { desc, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -11,10 +9,7 @@ export async function GET(
   const session = await getSessionCookies();
 
   if (!session.isAuthenticated) {
-    return NextResponse.json(
-      { error: 'Unauthorized' },
-      { status: 401 }
-    );
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
@@ -22,17 +17,10 @@ export async function GET(
     const configId = parseInt(id);
 
     if (isNaN(configId)) {
-      return NextResponse.json(
-        { error: 'Invalid configuration ID' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid ID format' }, { status: 400 });
     }
 
-    const revisions = await db
-      .select()
-      .from(configurationRevisions)
-      .where(eq(configurationRevisions.configurationId, configId))
-      .orderBy(desc(configurationRevisions.revisionNumber));
+    const revisions = await getRevisions(configId);
 
     return NextResponse.json({
       success: true,
@@ -40,9 +28,9 @@ export async function GET(
     });
 
   } catch (err) {
-    console.error('Failed to fetch revisions:', err);
+    console.error('API Route Error:', err);
     return NextResponse.json(
-      { error: 'Failed to fetch revisions' },
+      { error: 'Internal Server Error' },
       { status: 500 }
     );
   }

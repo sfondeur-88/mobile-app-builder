@@ -24,7 +24,7 @@ export default function TextSectionEditor() {
     <div className="space-y-4">
       <h3 className="font-semibold text-gray-900">Text Section</h3>
 
-      <div>
+      <div className="p-3 border border-gray-200 rounded-lg space-y-2 bg-white">
         <label
           htmlFor="text-title"
           className="inline text-sm font-medium text-gray-700 mb-1"
@@ -39,9 +39,7 @@ export default function TextSectionEditor() {
           placeholder="e.g., Welcome to Our Store"
           className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder:text-gray-400"
         />
-      </div>
 
-      <div>
         <label
           htmlFor="text-title-colour"
           className="inline text-sm font-medium text-gray-700 mb-1"
@@ -67,7 +65,7 @@ export default function TextSectionEditor() {
         </div>
       </div>
 
-      <div>
+      <div className="p-3 border border-gray-200 rounded-lg space-y-2 bg-white">
         <label
           htmlFor="text-description"
           className="inline text-sm font-medium text-gray-700 mb-1"
@@ -82,9 +80,7 @@ export default function TextSectionEditor() {
           rows={3}
           className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder:text-gray-400 resize-none"
         />
-      </div>
 
-      <div>
         <label
           htmlFor="text-description-colour"
           className="inline text-sm font-medium text-gray-700 mb-1"

@@ -102,7 +102,7 @@ export default function CarouselEditor() {
       <h3 className="font-semibold text-gray-900">Carousel Editor</h3>
 
       {/* Add New Image Form */}
-      <div className="space-y-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+      <div className="space-y-3 p-4 bg-white rounded-lg border border-gray-200">
         <h4 className="text-sm font-medium text-gray-700">Add New Image</h4>
 
         <div>

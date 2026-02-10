@@ -24,7 +24,7 @@ export default function CallToActionEditor() {
     <div className="space-y-4">
       <h3 className="font-semibold text-gray-900">Call to Action</h3>
 
-      <div>
+      <div className="p-3 border border-gray-200 rounded-lg space-y-2 bg-white">
         <label
           htmlFor="cta-label"
           className="inline text-sm font-medium text-gray-700 mb-1"
@@ -39,9 +39,7 @@ export default function CallToActionEditor() {
           placeholder="e.g., Shop Now"
           className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder:text-gray-400"
         />
-      </div>
 
-      <div>
         <label
           htmlFor="cta-url"
           className="inline text-sm font-medium text-gray-700 mb-1"
@@ -58,7 +56,7 @@ export default function CallToActionEditor() {
         />
       </div>
 
-      <div>
+      <div className="p-3 border border-gray-200 rounded-lg space-y-2 bg-white">
         <label
           htmlFor="cta-bg-colour"
           className="inline text-sm font-medium text-gray-700 mb-1"
@@ -81,9 +79,7 @@ export default function CallToActionEditor() {
             className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-gray-900 font-mono text-sm"
           />
         </div>
-      </div>
 
-      <div>
         <label
           htmlFor="cta-text-colour"
           className="inline text-sm font-medium text-gray-700 mb-1"
