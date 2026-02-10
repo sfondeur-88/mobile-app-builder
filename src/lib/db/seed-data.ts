@@ -21,13 +21,13 @@ const sampleContent: ConfigurationContent = {
     title: "Welcome to Our Store",
     titleColour: "#1A1A1A",
     description: "Discover amazing products curated just for you",
-    descriptionColour: "#666",
+    descriptionColour: "#666666",
   },
   callToAction: {
     label: "Shop Now",
     url: "https://example.com/shop",
-    backgroundColour: "#000",
-    textColour: "#FFF",
+    backgroundColour: "#000000",
+    textColour: "#FFFFFF",
   },
 };
 

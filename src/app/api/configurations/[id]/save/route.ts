@@ -1,8 +1,6 @@
+import { saveConfiguration } from "@/lib/api/saveConfiguration";
 import { getSessionCookies } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { configurations, configurationRevisions } from "@/lib/db/schema";
 import { updateConfigurationSchema } from "@/lib/validations";
-import { eq, desc } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -13,10 +11,7 @@ export async function PUT(
   const session = await getSessionCookies();
 
   if (!session.isAuthenticated) {
-    return NextResponse.json(
-      { error: 'Unauthorized' },
-      { status: 401 }
-    );
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
@@ -24,57 +19,17 @@ export async function PUT(
     const configId = parseInt(id);
 
     if (isNaN(configId)) {
-      return NextResponse.json(
-        { error: 'Invalid configuration ID' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid ID format' }, { status: 400 });
     }
 
     const body = await request.json();
-    const schemaData = updateConfigurationSchema.parse(body);
+    const { content } = updateConfigurationSchema.parse(body);
 
-    const result = await db.transaction(async (tx) => {
-      const [config] = await tx
-        .select()
-        .from(configurations)
-        .where(eq(configurations.id, configId));
-
-      if (!config) {
-        throw new Error(`Configuration with ID: ${configId} not found`);
-      }
-
-      const [latestRevision] = await tx
-        .select()
-        .from(configurationRevisions)
-        .where(eq(configurationRevisions.configurationId, configId))
-        .orderBy(desc(configurationRevisions.revisionNumber))
-        .limit(1);
-
-      const nextRevisionNumber = latestRevision ? latestRevision.revisionNumber + 1 : 1;
-
-      // Create new revision
-      const [newRevision] = await tx
-        .insert(configurationRevisions)
-        .values({
-          configurationId: configId,
-          revisionNumber: nextRevisionNumber,
-          content: schemaData.content,
-          isPublished: false,
-        })
-        .returning();
-
-      // Update configuration's updatedAt
-      await tx
-        .update(configurations)
-        .set({ updatedAt: new Date() })
-        .where(eq(configurations.id, configId));
-
-      return newRevision;
-    });
+    const newRevision = await saveConfiguration(configId, content);
 
     return NextResponse.json({
       success: true,
-      data: result,
+      data: newRevision,
     });
 
   } catch (err) {
@@ -85,16 +40,16 @@ export async function PUT(
       );
     }
 
-    if (err instanceof Error && err.message === 'Configuration not found') {
+    if (err instanceof Error && err.message.includes('not found')) {
       return NextResponse.json(
-        { error: 'Configuration not found' },
+        { error: err.message },
         { status: 404 }
       );
     }
 
-    console.error('Failed to save configuration:', err);
+    console.error('API Route Error:', err);
     return NextResponse.json(
-      { error: 'Failed to save configuration' },
+      { error: 'Internal Server Error' },
       { status: 500 }
     );
   }

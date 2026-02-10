@@ -28,7 +28,6 @@ export const configurationRevisions = pgTable("configuration_revisions", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-// Import your ConfigurationContent type
 import type { ConfigurationContent } from "@/types";
 
 export type Configuration = typeof configurations.$inferSelect;
