@@ -20,7 +20,7 @@ const BuilderClient = (props: Props) => {
   useEffect(() => {
     if (initialConfig?.latestRevision) {
       setSaveConfig(initialConfig.latestRevision.content);
-      setIsPublished(initialConfig.isPublished);
+      setIsPublished(initialConfig.latestRevision.isPublished);
     }
   }, [initialConfig, setSaveConfig, setIsPublished]);
 

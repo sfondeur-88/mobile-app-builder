@@ -37,7 +37,7 @@ export default function TextSectionEditor() {
           value={textSection.title}
           onChange={(e) => handleChange('title', e.target.value)}
           placeholder="e.g., Welcome to Our Store"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder:text-gray-400"
         />
       </div>
 
@@ -62,7 +62,7 @@ export default function TextSectionEditor() {
             value={textSection.titleColour}
             onChange={(e) => handleChange('titleColour', e.target.value)}
             placeholder="#000000"
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-gray-900 font-mono text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-gray-900 font-mono text-sm"
           />
         </div>
       </div>
@@ -80,7 +80,7 @@ export default function TextSectionEditor() {
           onChange={(e) => handleChange('description', e.target.value)}
           placeholder="e.g., Discover amazing products curated just for you"
           rows={3}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder:text-gray-400 resize-none"
         />
       </div>
 
@@ -104,7 +104,7 @@ export default function TextSectionEditor() {
             value={textSection.descriptionColour}
             onChange={(e) => handleChange('descriptionColour', e.target.value)}
             placeholder="#666666"
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-gray-900 font-mono text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-gray-900 font-mono text-sm"
           />
         </div>
       </div>

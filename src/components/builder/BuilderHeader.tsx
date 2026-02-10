@@ -5,10 +5,10 @@ import { SaveStatus } from "@/types";
 import { useState } from "react";
 
 export default function BuilderHeader() {
-  const hasUnsavedChanges = useBuilderStore((s) => s.hasUnsavedChanges);
   const isSaving = useBuilderStore((s) => s.isSaving);
   const isPublishing = useBuilderStore((s) => s.isPublishing);
   const isPublished = useBuilderStore((s) => s.isPublished);
+  const hasUnsavedChanges = useBuilderStore((s) => s.hasUnsavedChanges());
   const saveConfiguration = useBuilderStore((s) => s.saveConfiguration);
   const publishConfiguration = useBuilderStore((s) => s.publishConfiguration);
 
@@ -103,7 +103,7 @@ export default function BuilderHeader() {
 
       <div className="flex items-center gap-3">
         <button className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer">
-          Details
+          Revisions
         </button>
 
         <button
@@ -114,13 +114,11 @@ export default function BuilderHeader() {
           {isSaving ? 'Saving...' : 'Save'}
         </button>
 
-        <button className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer">
-          Preview
-        </button>
-
+        {/* TODO:Shane - tooltip on hover to let the user know more info? */}
+        {/* Ex: 'Current config is already published' */}
         <button
           onClick={handlePublish}
-          disabled={hasUnsavedChanges || isPublishing}
+          disabled={hasUnsavedChanges || isPublishing || (isPublished && !hasUnsavedChanges)}
           className="px-6 py-2 text-sm font-medium text-white bg-emerald-500 hover:bg-emerald-600 rounded-md disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
         >
           {isPublishing ? 'Publishing...' : 'Publish'}

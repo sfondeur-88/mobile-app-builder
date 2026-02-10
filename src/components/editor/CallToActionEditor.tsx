@@ -37,7 +37,7 @@ export default function CallToActionEditor() {
           value={callToAction.label}
           onChange={(e) => handleChange('label', e.target.value)}
           placeholder="e.g., Shop Now"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder:text-gray-400"
         />
       </div>
 
@@ -54,7 +54,7 @@ export default function CallToActionEditor() {
           value={callToAction.url}
           onChange={(e) => handleChange('url', e.target.value)}
           placeholder="https://example.com/shop"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder:text-gray-400"
         />
       </div>
 
@@ -78,7 +78,7 @@ export default function CallToActionEditor() {
             value={callToAction.backgroundColour}
             onChange={(e) => handleChange('backgroundColour', e.target.value)}
             placeholder="#000000"
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-gray-900 font-mono text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-gray-900 font-mono text-sm"
           />
         </div>
       </div>
@@ -103,7 +103,7 @@ export default function CallToActionEditor() {
             value={callToAction.textColour}
             onChange={(e) => handleChange('textColour', e.target.value)}
             placeholder="#FFFFFF"
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-gray-900 font-mono text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-gray-900 font-mono text-sm"
           />
         </div>
       </div>

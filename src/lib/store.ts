@@ -4,10 +4,10 @@ import { create } from 'zustand';
 interface BuilderState {
   draftConfig: ConfigurationContent | null;
   savedConfig: ConfigurationContent | null;
-  hasUnsavedChanges: boolean;
   isSaving: boolean;
   isPublishing: boolean;
   isPublished: boolean;
+  hasUnsavedChanges: () => boolean;
   setDraftConfig: (config: ConfigurationContent) => void;
   setSavedConfig: (config: ConfigurationContent) => void;
   setIsPublished: (isPublished: boolean) => void;
@@ -18,24 +18,22 @@ interface BuilderState {
 export const useBuilderStore = create<BuilderState>((set, get) => ({
   draftConfig: null,
   savedConfig: null,
-  hasUnsavedChanges: false,
   isSaving: false,
   isPublishing: false,
   isPublished: false,
 
-  setDraftConfig: (config) => {
-    const { savedConfig } = get();
-    set({
-      draftConfig: config,
-      hasUnsavedChanges: JSON.stringify(config) !== JSON.stringify(savedConfig),
-    });
+  hasUnsavedChanges: () => {
+    const { draftConfig, savedConfig } = get();
+    if (!draftConfig || !savedConfig) return false;
+    return JSON.stringify(draftConfig) !== JSON.stringify(savedConfig);
   },
+
+  setDraftConfig: (config) => set({ draftConfig: config }),
 
   setSavedConfig: (config) =>
     set({
       savedConfig: config,
       draftConfig: config,
-      hasUnsavedChanges: false,
     }),
 
   setIsPublished: (isPublished) => set({ isPublished }),
@@ -61,7 +59,6 @@ export const useBuilderStore = create<BuilderState>((set, get) => ({
       // Update saved config to match draft.
       set({
         savedConfig: draftConfig,
-        hasUnsavedChanges: false,
         isSaving: false,
         isPublished: false,
       });
