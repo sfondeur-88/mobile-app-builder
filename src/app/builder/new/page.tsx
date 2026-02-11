@@ -95,7 +95,7 @@ export default function NewConfigPage() {
         <button
           onClick={handleCreateConfig}
           disabled={isCreating}
-          className="w-full px-6 py-3 text-base font-medium text-white bg-emerald-500 hover:bg-emerald-600 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full px-6 py-3 text-base font-medium text-white bg-emerald-500 hover:bg-emerald-600 rounded-md disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
         >
           {isCreating ? 'Creating...' : 'Create Home Screen'}
         </button>
