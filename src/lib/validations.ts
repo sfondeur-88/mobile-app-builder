@@ -5,6 +5,7 @@ export const imageSchema = z.object({
   id: z.string(),
   url: z.string().url("Invalid image URL"),
   alt: z.string().optional(),
+  order: z.number().int().min(0),
 });
 
 export const carouselSchema = z.object({

@@ -21,7 +21,6 @@ export async function proxy(request: NextRequest) {
   return response;
 }
 
-// TODO:Shane - check if we need this.
 export const config = {
   matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };

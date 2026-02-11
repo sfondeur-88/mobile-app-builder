@@ -10,7 +10,6 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // TODO:Shane - Split and reuse?
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setError("");
@@ -76,7 +75,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:opacity-50 disabled:cursor-not-allowed"
+            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? "Signing in..." : "Sign in"}
           </button>

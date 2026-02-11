@@ -82,7 +82,6 @@ const Modal = (props: ModalProps) => {
             className="text-gray-400 hover:text-gray-600 cursor-pointer transition-colors"
             aria-label="Close modal"
           >
-            {/* TODO:Shane - x icon component */}
             <svg
               className="w-5 h-5"
               fill="none"

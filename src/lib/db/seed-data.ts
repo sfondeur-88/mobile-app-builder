@@ -9,11 +9,13 @@ const sampleContent: ConfigurationContent = {
         id: "1",
         url: "https://images.unsplash.com/photo-1441986300917-64674bd600d8",
         alt: "Store front",
+        order: 0,
       },
       {
         id: "2",
         url: "https://images.unsplash.com/photo-1445205170230-053b83016050",
         alt: "Fashion collection",
+        order: 1,
       },
     ],
   },

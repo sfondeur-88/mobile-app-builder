@@ -1,3 +1,4 @@
+import type { ConfigurationContent } from "@/types";
 import { boolean, jsonb, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 /**
@@ -28,9 +29,6 @@ export const configurationRevisions = pgTable("configuration_revisions", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-import type { ConfigurationContent } from "@/types";
 
 export type Configuration = typeof configurations.$inferSelect;
-export type NewConfiguration = typeof configurations.$inferInsert;
 export type ConfigurationRevision = typeof configurationRevisions.$inferSelect;
-export type NewConfigurationRevision = typeof configurationRevisions.$inferInsert;

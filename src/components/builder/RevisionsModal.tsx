@@ -160,7 +160,7 @@ export default function RevisionsModal({ isOpen, onClose, configId }: RevisionsM
             {revisions.map((revision) => (
               <div
                 key={revision.id}
-                className="p-4 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors"
+                className="p-4 border border-gray-200 rounded-lg hover:border-gray-300"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">

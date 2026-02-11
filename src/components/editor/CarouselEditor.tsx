@@ -1,8 +1,24 @@
 "use client";
 
 import { useBuilderStore } from "@/lib/store";
+import {
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { useState } from "react";
 import ConfirmationModal from "../ui/ConfirmationModal";
+import SortableImage from "./SortableImage";
 
 export default function CarouselEditor() {
   const draftConfig = useBuilderStore((s) => s.draftConfig);
@@ -10,13 +26,42 @@ export default function CarouselEditor() {
 
   const [newImageUrl, setNewImageUrl] = useState<string>("");
   const [newImageAlt, setNewImageAlt] = useState<string>("");
-
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [imageToRemove, setImageToRemove] = useState<string | null>(null);
+
+  const dragAndDropSensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   if (!draftConfig) return null;
 
   const { carousel } = draftConfig;
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = carousel.images.findIndex((img) => img.id === active.id);
+      const newIndex = carousel.images.findIndex((img) => img.id === over.id);
+
+      const reorderedImages = arrayMove(carousel.images, oldIndex, newIndex).map(
+        (img, idx) => ({
+          ...img,
+          order: idx,
+        })
+      );
+
+      setDraftConfig({
+        ...draftConfig,
+        carousel: {
+          images: reorderedImages,
+        },
+      });
+    }
+  };
 
   const handleAddImage = () => {
     if (!newImageUrl.trim()) return;
@@ -136,7 +181,7 @@ export default function CarouselEditor() {
         <button
           onClick={handleAddImage}
           disabled={!newImageUrl.trim()}
-          className="w-full px-4 py-2 text-sm font-medium text-white bg-emerald-500 hover:bg-emerald-600 rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full px-4 py-2 text-sm font-medium text-white bg-emerald-500 hover:bg-emerald-600 rounded-md disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
         >
           Add Image
         </button>
@@ -151,72 +196,31 @@ export default function CarouselEditor() {
         {carousel.images.length === 0 ? (
           <p className="text-sm text-gray-500 text-center py-4">No images added yet!</p>
         ) : (
-          <div className="space-y-2">
-            {carousel.images.map((image, index) => (
-              <div
-                key={image.id}
-                className="p-3 border border-gray-200 rounded-lg space-y-2 bg-white"
-              >
-                {/* Image Preview & Controls */}
-                <div className="flex gap-3">
-                  <div className="w-20 h-20 shrink-0 bg-gray-100 rounded overflow-hidden border border-gray-200">
-                    <img
-                      src={image.url}
-                      alt={image.alt || 'Carousel image'}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Crect fill="%23ddd" width="80" height="80"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle"%3E?%3C/text%3E%3C/svg%3E';
-                      }}
-                    />
-                  </div>
-
-                  {/* Image Details */}
-                  <div className="flex-1 space-y-2">
-                    <input
-                      type="url"
-                      value={image.url}
-                      onChange={(e) => handleUpdateImage(image.id, "url", e.target.value)}
-                      placeholder="Image URL"
-                      className="w-full px-2 py-1 text-sm border border-gray-300 rounded text-gray-900"
-                    />
-                    <input
-                      type="text"
-                      value={image.alt || ''}
-                      onChange={(e) => handleUpdateImage(image.id, "alt", e.target.value)}
-                      placeholder="Alt text"
-                      className="w-full px-2 py-1 text-sm border border-gray-300 rounded text-gray-900"
-                    />
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                {/* TODO:Shane - icons for arrows? */}
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => handleMoveImage(index, "up")}
-                    disabled={index === 0}
-                    className="px-3 py-1 text-xs font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
-                  >
-                    ↑ Move Up
-                  </button>
-                  <button
-                    onClick={() => handleMoveImage(index, "down")}
-                    disabled={index === carousel.images.length - 1}
-                    className="px-3 py-1 text-xs font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
-                  >
-                    ↓ Move Down
-                  </button>
-                  <button
-                    onClick={() => handleRemoveImage(image.id)}
-                    className="ml-auto px-3 py-1 text-xs font-medium text-red-600 bg-white border border-red-300 hover:bg-red-50 cursor-pointer rounded"
-                  >
-                    Remove
-                  </button>
-                </div>
+          <DndContext
+            sensors={dragAndDropSensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={carousel.images.map((img) => img.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              <div className="space-y-2">
+                {carousel.images.map((image, index) => (
+                  <SortableImage
+                    key={image.id}
+                    image={image}
+                    index={index}
+                    totalImages={carousel.images.length}
+                    onUpdate={handleUpdateImage}
+                    onRemove={handleRemoveImage}
+                    onMoveUp={() => handleMoveImage(index, "up")}
+                    onMoveDown={() => handleMoveImage(index, "down")}
+                  />
+                ))}
               </div>
-            ))}
-          </div>
+            </SortableContext>
+          </DndContext>
         )}
       </div>
 

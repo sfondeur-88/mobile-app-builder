@@ -26,7 +26,7 @@ const BuilderClient = (props: Props) => {
 
   return (
     <div className="h-[calc(100vh-3.5rem)] flex flex-col bg-gray-50">
-      <BuilderHeader />
+      <BuilderHeader configId={initialConfig.id} />
 
       <div className="flex-1 flex overflow-hidden">
         <EditorSidebar />

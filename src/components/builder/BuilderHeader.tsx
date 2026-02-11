@@ -5,7 +5,7 @@ import { SaveStatus } from "@/types";
 import { useState } from "react";
 import RevisionsModal from "./RevisionsModal";
 
-export default function BuilderHeader() {
+export default function BuilderHeader({ configId }: { configId: number }) {
   const isSaving = useBuilderStore((s) => s.isSaving);
   const isPublishing = useBuilderStore((s) => s.isPublishing);
   const isPublished = useBuilderStore((s) => s.isPublished);
@@ -20,7 +20,7 @@ export default function BuilderHeader() {
   const handleSave = async () => {
     try {
       setSaveStatus('idle');
-      await saveConfiguration(1); // TODO:Shane - Make configId dynamic
+      await saveConfiguration(configId);
       setSaveStatus('success');
 
       setTimeout(() => setSaveStatus('idle'), 2000);
@@ -32,7 +32,6 @@ export default function BuilderHeader() {
     }
   };
 
-  // TODO:Shane - Snackbar for publishing?
   const handlePublish = async () => {
     if (hasUnsavedChanges) {
       setPublishStatus('error');
@@ -42,7 +41,7 @@ export default function BuilderHeader() {
 
     try {
       setPublishStatus('idle');
-      await publishConfiguration(1); // TODO:Shane - Make configId dynamic
+      await publishConfiguration(configId);
       setPublishStatus('success');
 
       setTimeout(() => setPublishStatus('idle'), 2000);
@@ -120,8 +119,6 @@ export default function BuilderHeader() {
             {isSaving ? 'Saving...' : 'Save'}
           </button>
 
-          {/* TODO:Shane - tooltip on hover to let the user know more info? */}
-          {/* Ex: 'Current config is already published' */}
           <button
             onClick={handlePublish}
             disabled={hasUnsavedChanges || isPublishing || (isPublished && !hasUnsavedChanges)}
@@ -135,7 +132,7 @@ export default function BuilderHeader() {
       <RevisionsModal
         isOpen={isRevisionsOpen}
         onClose={() => setIsRevisionsOpen(false)}
-        configId={1}
+        configId={configId}
       />
     </>
   );
