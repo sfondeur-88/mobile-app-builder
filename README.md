@@ -109,7 +109,9 @@ mobile-app-builder/
 
 ## Architecture
 
-[See architecture diagram: `docs/architecture.png`]
+See architecture diagram:
+
+![Architecture Diagram](./doc/take-home-architecture.png)
 
 ### High-Level Flow
 
@@ -123,7 +125,6 @@ mobile-app-builder/
 - Manage draft state with Zustand
 - Call API routes for mutations (save/publish/restore)
 - Real-time preview updates on every edit
-
 **API Routes:**
 
 - Handles authentication checks
@@ -157,7 +158,7 @@ Implemented single config per user (focused on home screen) with extensible rout
 **Data Access Layer Pattern:**
 Extracted db operations into `/lib/api` functions used by both Server Components and API Routes. Keeps business logic DRY and reusable.
 
-See `DECISION_LOG.md` for detailed reasoning, AI usage, and areas i'd choose for improvement.
+- [Decision Log](./DECISION_LOG.md) for detailed reasoning, AI usage, and areas i'd choose for improvement.
 
 ## Notable Assumptions
 
